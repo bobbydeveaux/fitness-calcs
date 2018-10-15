@@ -7,22 +7,29 @@ import (
 
 func main() {
 	log.Println("Test")
-	navyfat := calc.CalcNavyFat(71*2.54, 31, 15, 75, 0)
-	fatPercent := navyfat
-	leanmass, fatmass := calc.CalcLeanMass(75, fatPercent)
-	bmr := calc.CalcBmr(leanmass)
-	tdee := calc.CalcTdee(bmr, "low")
-	calorieGoal := calc.CalcCalorieGoal(tdee, "medium")
-	log.Print("navyfat: ")
-	log.Println(navyfat)
-	log.Print("leanmass: ")
-	log.Println(leanmass)
-	log.Print("fatmass: ")
-	log.Println(fatmass)
-	log.Print("bmr: ")
-	log.Println(bmr)
-	log.Print("tdee: ")
-	log.Println(tdee)
-	log.Print("calorie goal: ")
-	log.Println(calorieGoal)
+	bobby := calc.Person{
+		Height:    71,
+		Waist:     31.00,
+		Neck:      15.00,
+		Mass:      75.00,
+		Hip:       0,
+		Activity:  "low",
+		Deficit:   "medium",
+		Lifestyle: "lchf",
+	}
+
+	stephanie := calc.Person{
+		Height:    65,
+		Waist:     29.00,
+		Neck:      12.50,
+		Mass:      53.00,
+		Hip:       35.00,
+		Activity:  "low",
+		Deficit:   "easy",
+		Lifestyle: "lchf",
+	}
+
+	calc.CalcAll(bobby)
+	calc.CalcAll(stephanie)
+
 }

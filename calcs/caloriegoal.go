@@ -1,6 +1,8 @@
 package calc
 
-import ()
+import (
+	"math"
+)
 
 func CalcCalorieGoal(tdee float64, goal string) float64 {
 
@@ -21,5 +23,5 @@ func CalcCalorieGoal(tdee float64, goal string) float64 {
 		factor = 0.80
 	}
 
-	return tdee * factor
+	return math.Round(tdee * factor)
 }

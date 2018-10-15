@@ -1,6 +1,8 @@
 package calc
 
-import ()
+import (
+	"math"
+)
 
 func CalcTdee(bmr float64, activityLevel string) float64 {
 
@@ -19,5 +21,5 @@ func CalcTdee(bmr float64, activityLevel string) float64 {
 		factor = 1.9
 	}
 
-	return bmr * factor
+	return math.Round(bmr * factor)
 }
