@@ -14,9 +14,23 @@ type Person struct {
 	Activity  string
 	Deficit   string
 	Lifestyle string
+	Calcs     Calcs
 }
 
-func CalcAll(p Person) {
+type Calcs struct {
+	NavyFat     float64
+	FatPercent  float64
+	LeanMass    float64
+	FatMass     float64
+	Bmr         float64
+	Tdee        float64
+	CalorieGoal float64
+	ProteinGoal float64
+	CarbGoal    float64
+	FatGoal     float64
+}
+
+func CalcAll(p Person) Person {
 
 	navyfat := CalcNavyFat(p.Height, p.Waist, p.Neck, p.Mass, p.Hip)
 	fatPercent := navyfat
@@ -28,6 +42,20 @@ func CalcAll(p Person) {
 	tdee := CalcTdee(bmr, p.Activity)
 	calorieGoal := CalcCalorieGoal(tdee, p.Deficit)
 	proteinGoal, carbGoal, fatGoal := CalcMacros(calorieGoal, p.Mass, p.Lifestyle)
+	calcs := Calcs{
+		NavyFat:     navyfat,
+		FatPercent:  fatPercent,
+		LeanMass:    leanmass,
+		FatMass:     fatmass,
+		Bmr:         bmr,
+		Tdee:        tdee,
+		CalorieGoal: calorieGoal,
+		ProteinGoal: proteinGoal,
+		FatGoal:     fatGoal,
+	}
+
+	p.Calcs = calcs
+
 	log.Print("navyfat: ")
 	log.Println(navyfat)
 	log.Print("averagefat: ")
@@ -48,4 +76,6 @@ func CalcAll(p Person) {
 	log.Println(carbGoal)
 	log.Print("fat goal: ")
 	log.Println(fatGoal)
+
+	return p
 }
