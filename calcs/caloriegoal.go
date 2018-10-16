@@ -11,7 +11,7 @@ func CalcCalorieGoal(tdee float64, goal string) float64 {
 	switch goal {
 	case "leangains":
 		factor = 1.2
-	case "maintenance":
+	case "maintain":
 		factor = 1.0
 	case "slow":
 		factor = 0.95

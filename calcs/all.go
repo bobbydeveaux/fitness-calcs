@@ -9,6 +9,7 @@ type Person struct {
 	Waist     float64
 	Neck      float64
 	Mass      float64
+	Bia       float64
 	Hip       float64
 	Activity  string
 	Deficit   string
@@ -19,6 +20,9 @@ func CalcAll(p Person) {
 
 	navyfat := CalcNavyFat(p.Height, p.Waist, p.Neck, p.Mass, p.Hip)
 	fatPercent := navyfat
+	if p.Bia > 0 {
+		fatPercent = (navyfat + p.Bia) / 2
+	}
 	leanmass, fatmass := CalcLeanMass(p.Mass, fatPercent)
 	bmr := CalcBmr(leanmass)
 	tdee := CalcTdee(bmr, p.Activity)
@@ -26,6 +30,8 @@ func CalcAll(p Person) {
 	proteinGoal, carbGoal, fatGoal := CalcMacros(calorieGoal, p.Mass, p.Lifestyle)
 	log.Print("navyfat: ")
 	log.Println(navyfat)
+	log.Print("averagefat: ")
+	log.Println(fatPercent)
 	log.Print("leanmass: ")
 	log.Println(leanmass)
 	log.Print("fatmass: ")
