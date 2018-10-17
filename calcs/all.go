@@ -30,8 +30,12 @@ type Calcs struct {
 	FatGoal     float64
 }
 
-func (c *Calcs) Check() bool {
+func (c *Calcs) Check(p Person) bool {
 	totCals := (c.ProteinGoal+c.CarbGoal)*4 + c.FatGoal*9
+	if p.Lifestyle == "psmf" {
+		c.CalorieGoal = totCals
+		return true
+	}
 	if c.CalorieGoal > totCals+5 || c.CalorieGoal < totCals-5 {
 		log.Println("Calorie calc mishap")
 		return false
@@ -51,7 +55,7 @@ func CalcAll(p Person) Person {
 	bmr := CalcBmr(leanmass)
 	tdee := CalcTdee(bmr, p.Activity)
 	calorieGoal := CalcCalorieGoal(tdee, p.Deficit)
-	proteinGoal, carbGoal, fatGoal := CalcMacros(calorieGoal, p.Mass, p.Lifestyle)
+	proteinGoal, carbGoal, fatGoal := CalcMacros(calorieGoal, p.Mass, leanmass, p.Lifestyle)
 	calcs := Calcs{
 		NavyFat:     navyfat,
 		FatPercent:  fatPercent,
@@ -65,7 +69,7 @@ func CalcAll(p Person) Person {
 		CarbGoal:    carbGoal,
 	}
 
-	if !calcs.Check() {
+	if !calcs.Check(p) {
 		return p
 	}
 

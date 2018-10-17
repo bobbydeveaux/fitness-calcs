@@ -4,7 +4,7 @@ import (
 	"math"
 )
 
-func CalcMacros(calorieGoal float64, mass float64, lifestyle string) (float64, float64, float64) {
+func CalcMacros(calorieGoal float64, mass float64, leanmass float64, lifestyle string) (float64, float64, float64) {
 	proteinGoal := mass * 2.2
 	proteinCals := proteinGoal * 4
 	carbGoal := 0.0
@@ -23,6 +23,10 @@ func CalcMacros(calorieGoal float64, mass float64, lifestyle string) (float64, f
 		fatGoal = fatCals / 9
 		carbCals = calorieGoal - fatCals - proteinCals
 		carbGoal = carbCals / 4
+	case "psmf":
+		fatGoal = 22.5
+		carbGoal = 22.5
+		proteinGoal = leanmass * 2.2 * 1.75
 	}
 
 	return math.Round(proteinGoal), math.Round(carbGoal), math.Round(fatGoal)
