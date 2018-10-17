@@ -42,8 +42,7 @@ func main() {
 		Lifestyle: "lchf",
 	}
 
-	calc.CalcAll(lee)
-	calc.CalcAll(bobby)
-	calc.CalcAll(steph)
-
+	lee.Calc()
+	bobby.Calc()
+	steph.Calc()
 }

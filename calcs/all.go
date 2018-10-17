@@ -5,46 +5,19 @@ import (
 )
 
 type Person struct {
-	Height    float64
-	Waist     float64
-	Neck      float64
-	Mass      float64
-	Bia       float64
-	Hip       float64
-	Activity  string
-	Deficit   string
-	Lifestyle string
-	Calcs     Calcs
+	Height    float64 `json:"height"`
+	Waist     float64 `json:"waist"`
+	Neck      float64 `json:"neck"`
+	Mass      float64 `json:"mass"`
+	Bia       float64 `json:"bia"`
+	Hip       float64 `json:"hip"`
+	Activity  string  `json:"activity"`
+	Deficit   string  `json:"deficit"`
+	Lifestyle string  `json:"lifestyle"`
+	Calcs     Calcs   `json:"calcs,omitempty"`
 }
 
-type Calcs struct {
-	NavyFat     float64
-	FatPercent  float64
-	LeanMass    float64
-	FatMass     float64
-	Bmr         float64
-	Tdee        float64
-	CalorieGoal float64
-	ProteinGoal float64
-	CarbGoal    float64
-	FatGoal     float64
-}
-
-func (c *Calcs) Check(p Person) bool {
-	totCals := (c.ProteinGoal+c.CarbGoal)*4 + c.FatGoal*9
-	if p.Lifestyle == "psmf" {
-		c.CalorieGoal = totCals
-		return true
-	}
-	if c.CalorieGoal > totCals+5 || c.CalorieGoal < totCals-5 {
-		log.Println("Calorie calc mishap")
-		return false
-	}
-
-	return true
-}
-
-func CalcAll(p Person) Person {
+func (p *Person) Calc() bool {
 
 	navyfat := CalcNavyFat(p.Height, p.Waist, p.Neck, p.Mass, p.Hip)
 	fatPercent := navyfat
@@ -69,8 +42,8 @@ func CalcAll(p Person) Person {
 		CarbGoal:    carbGoal,
 	}
 
-	if !calcs.Check(p) {
-		return p
+	if !calcs.Check(*p) {
+		return false
 	}
 
 	p.Calcs = calcs
@@ -96,5 +69,32 @@ func CalcAll(p Person) Person {
 	log.Print("fat goal: ")
 	log.Println(fatGoal)
 
-	return p
+	return true
+}
+
+type Calcs struct {
+	NavyFat     float64 `json:"navyfat,omitempty"`
+	FatPercent  float64 `json:"fatpercent,omitempty"`
+	LeanMass    float64 `json:"leanmass,omitempty"`
+	FatMass     float64 `json:"fatmass,omitempty"`
+	Bmr         float64 `json:"bmr,omitempty"`
+	Tdee        float64 `json:"tdee,omitempty"`
+	CalorieGoal float64 `json:"caloriegoal,omitempty"`
+	ProteinGoal float64 `json:"proteingoal,omitempty"`
+	CarbGoal    float64 `json:"carbgoal,omitempty"`
+	FatGoal     float64 `json:"fatgoal,omitempty"`
+}
+
+func (c *Calcs) Check(p Person) bool {
+	totCals := (c.ProteinGoal+c.CarbGoal)*4 + c.FatGoal*9
+	if p.Lifestyle == "psmf" {
+		c.CalorieGoal = totCals
+		return true
+	}
+	if c.CalorieGoal > totCals+5 || c.CalorieGoal < totCals-5 {
+		log.Println("Calorie calc mishap")
+		return false
+	}
+
+	return true
 }
