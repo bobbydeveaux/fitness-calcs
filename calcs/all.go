@@ -30,6 +30,16 @@ type Calcs struct {
 	FatGoal     float64
 }
 
+func (c *Calcs) Check() bool {
+	totCals := (c.ProteinGoal+c.CarbGoal)*4 + c.FatGoal*9
+	if c.CalorieGoal > totCals+5 || c.CalorieGoal < totCals-5 {
+		log.Println("Calorie calc mishap")
+		return false
+	}
+
+	return true
+}
+
 func CalcAll(p Person) Person {
 
 	navyfat := CalcNavyFat(p.Height, p.Waist, p.Neck, p.Mass, p.Hip)
@@ -52,6 +62,11 @@ func CalcAll(p Person) Person {
 		CalorieGoal: calorieGoal,
 		ProteinGoal: proteinGoal,
 		FatGoal:     fatGoal,
+		CarbGoal:    carbGoal,
+	}
+
+	if !calcs.Check() {
+		return p
 	}
 
 	p.Calcs = calcs
