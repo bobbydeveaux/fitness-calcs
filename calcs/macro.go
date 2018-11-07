@@ -33,6 +33,13 @@ func CalcMacros(calorieGoal float64, mass float64, leanmass float64, lifestyle s
 		fatGoal = fatCals / 9
 		carbCals = remainingCals * 0.5
 		carbGoal = carbCals / 4
+	case "gains":
+		proteinGoal = mass * 2.2 * 0.8
+		proteinCals = proteinGoal * 4
+		fatCals = calorieGoal * 0.3
+		fatGoal = fatCals / 9
+		carbCals = calorieGoal - fatCals - proteinCals
+		carbGoal = carbCals / 4
 	}
 
 	return math.Round(proteinGoal), math.Round(carbGoal), math.Round(fatGoal)

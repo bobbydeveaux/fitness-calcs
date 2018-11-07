@@ -2,19 +2,21 @@ package calc
 
 import (
 	"log"
+	"math"
 )
 
 type Person struct {
-	Height    float64 `json:"height"`
-	Waist     float64 `json:"waist"`
-	Neck      float64 `json:"neck"`
-	Mass      float64 `json:"mass"`
-	Bia       float64 `json:"bia"`
-	Hip       float64 `json:"hip"`
+	Height    float64 `json:"height,string"`
+	Waist     float64 `json:"waist,string"`
+	Neck      float64 `json:"neck,string"`
+	Mass      float64 `json:"mass,string"`
+	Bia       float64 `json:"bia,string"`
+	Hip       float64 `json:"hip,string"`
 	Activity  string  `json:"activity"`
 	Deficit   string  `json:"deficit"`
 	Lifestyle string  `json:"lifestyle"`
-	Calcs     Calcs   `json:"calcs,omitempty"`
+	Debug     string
+	Calcs     Calcs `json:"calcs,omitempty"`
 }
 
 func (p *Person) Calc() bool {
@@ -30,16 +32,16 @@ func (p *Person) Calc() bool {
 	calorieGoal := CalcCalorieGoal(tdee, p.Deficit)
 	proteinGoal, carbGoal, fatGoal := CalcMacros(calorieGoal, p.Mass, leanmass, p.Lifestyle)
 	calcs := Calcs{
-		NavyFat:     navyfat,
-		FatPercent:  fatPercent,
-		LeanMass:    leanmass,
-		FatMass:     fatmass,
-		Bmr:         bmr,
-		Tdee:        tdee,
-		CalorieGoal: calorieGoal,
-		ProteinGoal: proteinGoal,
-		FatGoal:     fatGoal,
-		CarbGoal:    carbGoal,
+		NavyFat:     checkNaN(navyfat),
+		FatPercent:  checkNaN(fatPercent),
+		LeanMass:    checkNaN(leanmass),
+		FatMass:     checkNaN(fatmass),
+		Bmr:         checkNaN(bmr),
+		Tdee:        checkNaN(tdee),
+		CalorieGoal: checkNaN(calorieGoal),
+		ProteinGoal: checkNaN(proteinGoal),
+		FatGoal:     checkNaN(fatGoal),
+		CarbGoal:    checkNaN(carbGoal),
 	}
 
 	if !calcs.Check(*p) {
@@ -93,8 +95,18 @@ func (c *Calcs) Check(p Person) bool {
 	}
 	if c.CalorieGoal > totCals+5 || c.CalorieGoal < totCals-5 {
 		log.Println("Calorie calc mishap")
+		log.Println(c.CalorieGoal)
+		log.Println(totCals)
 		return false
 	}
 
 	return true
+}
+
+func checkNaN(value float64) float64 {
+	if math.IsNaN(value) {
+		return 0.0
+	}
+
+	return value
 }
