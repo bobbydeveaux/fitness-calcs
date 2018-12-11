@@ -93,7 +93,7 @@ func (c *Calcs) Check(p Person) bool {
 		c.CalorieGoal = totCals
 		return true
 	}
-	if c.CalorieGoal > totCals+5 || c.CalorieGoal < totCals-5 {
+	if c.CalorieGoal > totCals+10 || c.CalorieGoal < totCals-10 {
 		log.Println("Calorie calc mishap")
 		log.Println(c.CalorieGoal)
 		log.Println(totCals)
